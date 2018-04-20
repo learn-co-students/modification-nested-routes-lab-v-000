@@ -87,6 +87,10 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_id, :artist_name)
+    if params[:song][:artist_name].blank?
+      params.require(:song).permit(:title, :artist_id)
+    else
+      params.require(:song).permit(:title, :artist_name)
+    end
   end
 end
