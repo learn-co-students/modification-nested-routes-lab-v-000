@@ -3,7 +3,7 @@ class SongsController < ApplicationController
     if params[:artist_id]
       @artist = Artist.find_by(id: params[:artist_id])
       if @artist.nil?
-        redirect_to artists_path, alert: "Artist not found"
+        redirect_to artists_path, alert: 'Artist not found'
       else
         @songs = @artist.songs
       end
@@ -17,7 +17,7 @@ class SongsController < ApplicationController
       @artist = Artist.find_by(id: params[:artist_id])
       @song = @artist.songs.find_by(id: params[:id])
       if @song.nil?
-        redirect_to artist_songs_path(@artist), alert: "Song not found"
+        redirect_to artist_songs_path(@artist), alert: 'Song not found'
       end
     else
       @song = Song.find(params[:id])
@@ -25,7 +25,11 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    if params.key?(:artist_id) && !Artist.exists?(params[:artist_id])
+      redirect_to artists_path, alert: 'Artist not found.'
+    else
+      @song = Song.new(artist_id: params[:artist_id])
+    end
   end
 
   def create
@@ -39,7 +43,17 @@ class SongsController < ApplicationController
   end
 
   def edit
-    @song = Song.find(params[:id])
+    @song = if params.key?(:artist_id)
+              artist = Artist.find_by(id: params[:artist_id])
+              if artist.nil?
+                redirect_to artists_path, alert: 'Artist not found'
+              else
+                artist.songs.find_by(id: params[:id])
+              end
+            else
+              Song.find(params[:id])
+            end
+    redirect_to artist_songs_path(artist), alert: 'Song not found' if @song.nil?
   end
 
   def update
@@ -57,14 +71,13 @@ class SongsController < ApplicationController
   def destroy
     @song = Song.find(params[:id])
     @song.destroy
-    flash[:notice] = "Song deleted."
+    flash[:notice] = 'Song deleted.'
     redirect_to songs_path
   end
 
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
-
