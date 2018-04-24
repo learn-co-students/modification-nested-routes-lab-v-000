@@ -1,6 +1,5 @@
 module SongsHelper
-  def artist_select(song, artist)
-    # binding.pry
+  def artist_select(artist, song)
     if song.artist.nil? || current_page?(edit_song_path(song))
       select_tag "song[artist_id]", options_from_collection_for_select(Artist.all, :id, :name)
     else
