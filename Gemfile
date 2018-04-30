@@ -12,9 +12,10 @@ group :development, :test do
   gem 'capybara'
   gem 'rspec-rails'
   gem 'shoulda'
+  gem 'hirb'
+  gem 'awesome_print'
 end
 
 group :development do
   gem 'web-console', '~> 2.0'
 end
-
