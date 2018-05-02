@@ -25,9 +25,18 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    #creating a new song through /artists/:artist_id/posts/new
+    #if there is an artist_id check to see if it exists
+    #if it doesn't exist, redirect the user to the artists#index page
+    if params[:artist_id] && !Artist.exists?(params[:artist_id])
+      redirect_to artists_path, alert: "Artist not found."
+    else 
+    #if the artist_id exists, create the posts
+    #Even if the artist_id is nil, create the post anyway
+    @song = Song.new(:artist_id => params[:artist_id])
+    end
   end
-
+ 
   def create
     @song = Song.new(song_params)
 
@@ -39,8 +48,27 @@ class SongsController < ApplicationController
   end
 
   def edit
-    @song = Song.find(params[:id])
-  end
+    #editing a song through /artists/artist_id/songs/:id/edit
+    #if there is an artist_id we know we're editing through the 
+    #artist
+   if params[:artist_id]
+     artist = Artist.find_by_id(params[:artist_id])
+     #if there is no artist, redirect the user to artists#index
+     if artist.nil?
+       redirect_to artists_path, alert: "Artist not found."
+     else
+       #if there is an artist see if the song exists in their collection
+       @song = artist.songs.find_by_id(params[:id])
+       #if the song doesn't exist then send them to artist_songs#index
+       if @song.nil?
+         redirect_to artist_songs_path(artist), alert: "Song not found."
+       end
+      end
+     end
+     #else the song will be pulled from the Song db. 
+    else
+     @song = Song.find_by_id(params[:id])
+   end
 
   def update
     @song = Song.find(params[:id])
@@ -64,7 +92,7 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
 
