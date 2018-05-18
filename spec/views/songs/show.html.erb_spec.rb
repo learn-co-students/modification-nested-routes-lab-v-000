@@ -8,10 +8,9 @@ RSpec.describe 'songs/show' do
     allow(view).to receive(:display_artist).and_return("They Might Be Giants")
     assign(:song, Song.first)
   end
-
+  
   it 'calls the helper to display the artist' do
     render
     expect(rendered).to match /They Might Be Giants/
   end
 end
-
