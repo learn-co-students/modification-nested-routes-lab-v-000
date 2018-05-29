@@ -1,4 +1,9 @@
 <%= form_for @song  do |f| %>
+  <%= artist_id_field(@song) %>
+   <!-- <%= f.hidden_field :artist_id %> -->
+   <!-- #we bring the variable from the new action, to the form in view, so it can be submitted back to the server when the now song is created (this form is submitted) -->
+   <!-- but we only want to carry the hidden field if they navigated thru the nested route. if navigating thru the regular route, we need to create the new song differently.
+  # we put all this logic into a songs helper instead of cluttering the view.  -->
   <%= f.label :title %>
   <%= f.text_field :title %><br>
   <%= f.label :artist_name %>

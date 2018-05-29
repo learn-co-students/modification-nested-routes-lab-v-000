@@ -33,6 +33,8 @@ class SongsController < ApplicationController
   end
 
   def create
+    #in order to keep using this create action as is, we need to carry the artist_id parameter from songs#show to the songs#edit action (via a edit this song link on the show page), to the create action.
+
     @song = Song.new(song_params)
 
     if @song.save
@@ -87,6 +89,6 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
