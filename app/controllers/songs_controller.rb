@@ -25,10 +25,16 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    if params[:artist_id] && !Artist.exists?(params[:artist_id])
+      redirect_to artists_path, alert: "Artist not found."
+    else
+      @song = Song.new(artist_id: params[:artist_id])
+    end
   end
 
   def create
+    #in order to keep using this create action as is, we need to carry the artist_id parameter from songs#show to the songs#edit action (via a edit this song link on the show page), to the create action.
+
     @song = Song.new(song_params)
 
     if @song.save
@@ -39,7 +45,26 @@ class SongsController < ApplicationController
   end
 
   def edit
-    @song = Song.find(params[:id])
+    #when we are editing the song, we need to make sure the artist is valid and the post actually belongs to the correct author.
+    if params[:artist_id]
+    #if navigating thru the nested route artists/1/songs/2/edit
+      artist = Artist.find_by(id: params[:artist_id])
+      #find the artist and assign
+      if artist.nil?
+        #if the artist does not exist
+        redirect_to artists_path, alert: "Artist not found."
+      else
+      #if we have the artist
+        @song = artist.songs.find_by(id: params[:id])
+        #search for the song to edit through the artists/songs and assign
+        redirect_to artist_songs_path(artist), alert: "Song not found." if @song.nil?
+        #redirect to the artists songs (their songs index page) if the song doesn't exist
+      end
+    else
+    #if navigating through the regular (unnested route such as songs/2/edit)
+      @song = Song.find(params[:id])
+      #assign the song variable here.
+    end
   end
 
   def update
@@ -64,7 +89,6 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
-
