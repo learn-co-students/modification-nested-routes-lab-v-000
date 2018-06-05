@@ -1,8 +1,10 @@
 <%= form_for @song  do |f| %>
   <%= f.label :title %>
+  <%= link_to "Edit Song", edit_artist_song_path(@song.artist, @song) if @song.artist %>)
   <%= f.text_field :title %><br>
   <%= f.label :artist_name %>
   <%= f.text_field :artist_name %>
+  <%= artist_select(@song.artist, @song)  %>
   <br />
 
   <%= f.submit %>
