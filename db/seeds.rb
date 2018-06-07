@@ -13,7 +13,11 @@ songs = [{artist_name: "The Killers", title: "Mr. Brightside"},
          {artist_name: "Daft Punk", title: "Harder, Better, Faster, Stronger"},
          {artist_name: "Pixies", title: "Where is My Mind?"},
          {artist_name: "Pixies", title: "Gigantic"},
-         {artist_name: "Pixies", title: "Monkey Gone to Heaven"}]
+         {artist_name: "Pixies", title: "Monkey Gone to Heaven"},
+	{title: "Mah Song"}
+
+
+]
 
 songs.each do |song|
   Song.create(song)
