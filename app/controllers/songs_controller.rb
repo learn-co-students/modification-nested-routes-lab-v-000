@@ -5,7 +5,7 @@ class SongsController < ApplicationController
     if params[:artist_id] && !Artist.exists?(id: params[:artist_id])
       redirect_to artists_path, alert: "Artist not found"
     else
-      @song = Song.new(id: params[:artist_id])
+      @song = Song.new(artist_id: params[:artist_id])
       #why dont' we need to have @song = Song.new without parameter that
       # indicate an association with artists?
     end
@@ -49,10 +49,13 @@ class SongsController < ApplicationController
   end
 
   def edit
-    if params(:artist_id)
-      author = Author.find_by(id: params[:author_id])
-      if author.nil?
-        
+    if params[:artist_id]
+      artist = Artist.find_by(id: params[:artist_id])
+      if artist.nil?
+        redirect_to artists_path, alert: "Artist not found"
+      else
+        @song = artist.songs.find_by(id: params[:id])
+        redirect to artist_songs_path(artist), alert: "Song not found." if @song.nil?
       end
     else
       @song = Song.find(params[:id])
@@ -81,7 +84,7 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name, :author_id)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
     # binding.pry
   end
 end
