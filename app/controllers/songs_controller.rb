@@ -1,4 +1,11 @@
 class SongsController < ApplicationController
+  def new
+    @artist = Artist.find_or_create_by(id: params[:artist_id])
+    @song = @artist.songs.find_by(id: :artist_id) 
+  
+  
+  end
+
   def index
     if params[:artist_id]
       @artist = Artist.find_by(id: params[:artist_id])
@@ -22,10 +29,6 @@ class SongsController < ApplicationController
     else
       @song = Song.find(params[:id])
     end
-  end
-
-  def new
-    @song = Song.new
   end
 
   def create
@@ -65,6 +68,7 @@ class SongsController < ApplicationController
 
   def song_params
     params.require(:song).permit(:title, :artist_name)
+    # binding.pry
   end
 end
 
