@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :artists do
-    resources :songs, only: [:index, :show]
+    resources :songs, only: [:index, :show, :new, :edit]
   end
   resources :songs
 end
+
+
+#Create a helper to display a drop-down list of artists if someone edits a song directly via /songs/id/edit and to only display the artist's name if they are editing through nested routing. Name the helper method artist_select. Hint: You'll need to set a variable in the controller action to pass to the helper method as an argument along with a song instance.
