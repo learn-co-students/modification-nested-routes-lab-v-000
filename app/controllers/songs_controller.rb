@@ -48,6 +48,18 @@ class SongsController < ApplicationController
   end
 
   def edit
+    # if artist_id exists?
+      # if artist valid, check if the song is valid within the artist
+        # if song found
+          # then song to edit = Song.find(params[:id])
+          # edit song nested under artist_id
+        # else redirect to artist_songs_path "Song not found"
+      # elsif artist not valid, redirect to artists_path, "Artist not found"
+    # elsif params[:artist_id] does not exist(songs/1/edit directly entered)
+      # redirect_to edit_song_path
+      # @song = Song.find(params[:id])
+
+
     if params[:artist_id] && !Artist.find_by(id: params[:artist_id]).nil?
       if Artist.find(params[:artist_id]).songs.include?(params[:id])
         @song = Song.find(params[:id])
