@@ -53,6 +53,8 @@ class SongsController < ApplicationController
         flash[:alert] = "Invalid Song"
         redirect_to artist_songs_path(@artist)
       end
+    elsif !params[:artist_id]
+      @song = Song.find_by(id: params[:id])
     else
       redirect_to artists_path
     end
