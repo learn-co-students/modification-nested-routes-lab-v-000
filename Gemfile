@@ -11,10 +11,9 @@ group :development, :test do
   gem 'pry'
   gem 'capybara'
   gem 'rspec-rails'
-  gem 'shoulda'
+  gem 'shoulda', '<=3.5.0'
 end
 
 group :development do
   gem 'web-console', '~> 2.0'
 end
-
