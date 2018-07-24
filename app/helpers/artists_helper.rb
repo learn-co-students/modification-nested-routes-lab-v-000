@@ -5,8 +5,15 @@ module ArtistsHelper
   end
 
   def artist_select(artist, song)
-    artist.name if artist else select_tag "song[artist_id]", options_from_collection_for_select(Artist.all, :id, :name)     # options_from_collection_for_select(collection, value_method, text_method, selected = nil)
-
+    if song.artist.nil?
+      select_tag "song[artist_id]", options_from_collection_for_select(Artist.all, :id, :name)
+    else
+      hidden_field_tag "song[artist_id]", song.artist_id
+    end
   end
+
+    # artist.name if artist else select_tag "song[artist_id]", options_from_collection_for_select(Artist.all, :id, :name)
+    #
+    # options_from_collection_for_select(collection, value_method, text_method, selected = nil)
 
 end
