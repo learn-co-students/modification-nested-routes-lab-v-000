@@ -14,16 +14,23 @@ class SongsController < ApplicationController
   end
 
   def show
-    if params[:artist_id]
-      @artist = Artist.find_by(id: params[:artist_id])
-      @song = @artist.songs.find_by(id: params[:id])
-      if @song.nil?
-        redirect_to artist_songs_path(@artist), alert: "Song not found"
-      end
-    else
-      @song = Song.find(params[:id])
-    end
-  end
+   if params[:artist_id]
+     @artist = Artist.find_by(id: params[:artist_id])
+     @song = @artist.songs.find_by(id: params[:id])
+     if @song.nil?
+       redirect_to artist_songs_path(@artist), alert: "Song not found"
+     end
+   else
+     @song = Song.find(params[:id])
+   end
+ end
+
+
+  # describe "GET new" do
+  #   it "sets artist when nested route" do
+  #     get :new, artist_id: @artist.id
+  #     expect(assigns(:song).artist_id).to eq @artist.id
+  #   end
 
   def new
     if params[:artist_id]
@@ -51,16 +58,16 @@ class SongsController < ApplicationController
     if params[:artist_id]
       @artist = Artist.find_by(id: params[:artist_id])
       if @artist.nil?
-        flash[:action] = "Artist not found"
-        redirect_to artists_path
-      elsif @song.nil?
-        flash[:action] = "Song not found"
-        redirect_to artist_songs_path(@artist)
+        redirect_to artists_path, alert: "Artist not found"
+      else
+        @song = @artist.songs.find_by(id: params[:id])
+        redirect_to artist_songs_path(@artist), alert: "Song not found" if @song.nil?
       end
     else
       @song = Song.find(params[:id])
     end
   end
+
 
 
   def update
