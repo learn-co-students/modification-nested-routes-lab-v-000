@@ -14,4 +14,3 @@ RSpec.describe 'songs/show' do
     expect(rendered).to match /They Might Be Giants/
   end
 end
-
