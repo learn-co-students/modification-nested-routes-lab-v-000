@@ -1,6 +1,10 @@
 class Song < ActiveRecord::Base
   belongs_to :artist
 
+  # def self.by_artist(artist_id)
+  #   where(artist: artist_id)
+  # end
+
   def artist_name
     self.try(:artist).try(:name)
   end
