@@ -1,2 +1,4 @@
-<h1>Create a Song</h1>
-<%= render partial: "form" %>
+<h1><%= link_to @song.title, song_path(@song) %></h1>
+<h3> by <%= display_artist(@song) %></h3>
+
+<%= link_to "All Songs", songs_path %>
