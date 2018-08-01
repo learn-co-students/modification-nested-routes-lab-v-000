@@ -37,15 +37,6 @@ class SongsController < ApplicationController
   end
 
 
-# def new
-#   if params[:author_id] && !Author.exists?(params[:author_id])
-#     redirect_to authors_path, alert: "Author not found."
-#   else
-#     @post = Post.new(author_id: params[:author_id])
-#   end
-# end
-
-
 
   def create
     @song = Song.new(song_params)
@@ -57,9 +48,16 @@ class SongsController < ApplicationController
     end
   end
 
+
+
   def edit
     @song = Song.find(params[:id])
   end
+
+
+
+
+
 
   def update
     @song = Song.find(params[:id])
