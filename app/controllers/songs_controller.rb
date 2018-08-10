@@ -25,7 +25,13 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    #artist_id is provided by active record.
+    if params[:artist_id] && !Artist.exists?(params[:artist_id])
+      redirect_to artists_path, alert: "Artist not found."
+    else
+# If we capture an aritst_id through a nested route, we keep track of #it and assign the post to that artist.
+      @song = Song.new(artist_id: params[:artist_id])
+    end
   end
 
   def create
@@ -64,7 +70,7 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    #songs_controller to accept :artist_id
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
-
