@@ -25,17 +25,24 @@ class SongsController < ApplicationController
   end
 
   def new
-    #artist_id is provided by active record.
-    if params[:artist_id] && !Artist.exists?(params[:artist_id])
-      redirect_to artists_path, alert: "Artist not found."
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      @song = Song.new
+      @song.artist = @artist
+      redirect_to artists_path
     else
-# If we capture an aritst_id through a nested route, we keep track of #it and assign the post to that artist.
-      @song = Song.new(artist_id: params[:artist_id])
+      @song = Song.new
     end
   end
 
   def create
-    @song = Song.new(song_params)
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      @song = Song.new(song_params)
+      @song.artist = @artist
+    else
+      @song = Song.new(song_params)
+    end
 
     if @song.save
       redirect_to @song
@@ -45,11 +52,30 @@ class SongsController < ApplicationController
   end
 
   def edit
-    @song = Song.find(params[:id])
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+
+      if @artist
+        @song = @artist.songs.find_by(id: params[:id])
+        if @song.nil?
+          redirect_to artist_songs_path(@artist), alert: "Song not found"
+        end
+      else
+        redirect_to artists_path
+      end
+    else
+      @song = Song.find(params[:id])
+    end
   end
 
   def update
-    @song = Song.find(params[:id])
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      @song = Song.find(params[:id])
+      @song.artist = @artist
+    else
+      @song = Song.find(params[:id])
+    end
 
     @song.update(song_params)
 
@@ -70,7 +96,6 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    #songs_controller to accept :artist_id
     params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
