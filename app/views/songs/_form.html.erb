@@ -3,7 +3,6 @@
   <%= f.text_field :title %><br>
   <%= f.label :artist_name %>
   <%= f.text_field :artist_name %>
-  <br />
-
+  <%= artist_select(@song, "why does this need two arguments?") %>
   <%= f.submit %>
 <% end %>
