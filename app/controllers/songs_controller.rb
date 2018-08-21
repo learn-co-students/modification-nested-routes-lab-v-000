@@ -62,7 +62,7 @@ class SongsController < ApplicationController
     else
       # binding.pry
       @song = Song.find(params[:id])
-      render 'songs/index'
+      render 'songs/edit'
     end
   end
 
