@@ -12,9 +12,14 @@ group :development, :test do
   gem 'capybara'
   gem 'rspec-rails'
   gem 'shoulda'
+  gem 'rspec-rails'
+
 end
 
 group :development do
   gem 'web-console', '~> 2.0'
 end
 
+group :test do
+  gem 'shoulda-matchers'
+end
