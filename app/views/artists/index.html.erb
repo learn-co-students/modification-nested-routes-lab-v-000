@@ -1,4 +1,12 @@
+
+<% if flash[:alert] %>
+  <div id="missing artist error">
+    <h2> <%= flash[:alert] %> </h2>
+  </div>
+<% end %>
+
 <h1>Artists</h1>
+
 <ul>
   <% @artists.each do |artist| %>
     <li><%= link_to artist.name, artist_songs_path(artist) %></li>
