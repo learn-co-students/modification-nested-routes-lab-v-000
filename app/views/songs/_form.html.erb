@@ -9,8 +9,6 @@
   <% if @song.artist.nil? %>
     <%= f.select :artist_id, options_from_collection_for_select(Artist.all, :id, :name) %>
   <% end %>
-  
-  <%= f.select(:song_artist_id) %>
 
   <%= f.submit %>
 <% end %>
