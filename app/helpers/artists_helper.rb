@@ -8,17 +8,11 @@ module ArtistsHelper
   def artist_select(song, artist)
 
 binding.pry
-
-=begin
-  <% if @song.artist.nil? %>
-    <%= f.select :artist_id, options_from_collection_for_select(Artist.all, :id, :name) %>
-  <% end %>
-=end 
-
+ 
     if artist
-      hidden_field_tag "song[artist.id]", artist.id
+      hidden_field_tag "song[artist_id]", artist.id
     else
-      
+      select_tag "song[artist_id]", options_from_collection_for_select(Artist.all, :id, :name)
     end
 
   end
