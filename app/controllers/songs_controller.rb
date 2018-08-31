@@ -43,12 +43,11 @@ class SongsController < ApplicationController
   end
 
   def edit
-binding.pry
+# binding.pry
     if params[:artist_id] && !@artist = Artist.find_by(id: params[:artist_id])
       redirect_to artists_path, alert: "Artist not found."
-    elsif @artist
-# song param is just ID, need to handle artist not having song with that ID    
-      @song = Song.find(params[:artist_id])
+    elsif @artist && !@artist.songs.find(params[:id])
+      redirect_to artist_songs_path(@artist) 
     else
       @song = Song.find(params[:id])
     end  
