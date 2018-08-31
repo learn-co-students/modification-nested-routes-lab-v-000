@@ -6,7 +6,7 @@
   <%= f.label :artist_name %>
   <%= f.text_field :artist_name %>
   
-  <%= text_field_tag "song_artist_id" %>
+  <%= f.select(:song_artist_id) %>
 
   <%= f.submit %>
 <% end %>
