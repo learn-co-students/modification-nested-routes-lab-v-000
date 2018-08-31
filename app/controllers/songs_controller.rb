@@ -47,6 +47,7 @@ binding.pry
     if params[:artist_id] && !@artist = Artist.find_by(id: params[:artist_id])
       redirect_to artists_path, alert: "Artist not found."
     elsif @artist
+# song param is just ID, need to handle artist not having song with that ID    
       @song = Song.find(params[:artist_id])
     else
       @song = Song.find(params[:id])
