@@ -4,6 +4,6 @@
   <%= f.label :artist_name %>
   <%= f.text_field :artist_name %>
   <br />
-
+  <%= f.select(:artist_id, Artist.all.collect {|a| [a.name, a.id]}, { include_blank: true }) %>
   <%= f.submit %>
 <% end %>
