@@ -1,5 +1,6 @@
-describe "songs", type:  :feature do
 
+
+describe "songs", type:  :feature do
   before do
     Artist.destroy_all
     Song.destroy_all
