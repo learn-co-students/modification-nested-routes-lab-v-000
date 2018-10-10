@@ -1,4 +1,7 @@
 <%= form_for @song  do |f| %>
+
+ <%= artist_select(@song) %>
+
   <%= f.label :title %>
   <%= f.text_field :title %><br>
   <%= f.hidden_field :artist_id %>
@@ -8,4 +11,3 @@
 
   <%= f.submit %>
 <% end %>
-<%= link_to "Edit Song", edit_artist_song_path(@song.artist, @song) %>
