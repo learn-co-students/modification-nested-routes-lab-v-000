@@ -4,6 +4,10 @@ module ArtistsHelper
   end
 
   def artist_select(song, artist)
-    song.artist.nil? ? collection_select(:song, :name, Artist.all, :id, :name) : display_artist(song)
+    if artist.valid?
+      display_artist(song)
+    else
+      collection_select(:song, :name, Artist.all, :id, :name)
+    end
   end
 end
