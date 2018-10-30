@@ -4,10 +4,11 @@ module ArtistsHelper
   end
 
   def artist_select(song, artist)
-    if artist.valid?
-      display_artist(song)
+    if artist
+      artist.name
     else
-      collection_select(:song, :name, Artist.all, :id, :name)
+      select_tag "song[artist_id]", options_from_collection_for_select(Artist.all, 'id', 'name')
+      # collection_select(:song, :name, Artist.all, :id, :name)
     end
   end
 end
