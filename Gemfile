@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.5'
+gem 'rails'
 gem 'sqlite3'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'jbuilder', '~> 2.0'
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sass-rails'
+gem 'uglifier'
+gem 'jbuilder'
+gem 'sdoc', group: :doc
+gem 'rails-controller-testing'
 
 group :development, :test do
   gem 'pry'
@@ -15,6 +16,5 @@ group :development, :test do
 end
 
 group :development do
-  gem 'web-console', '~> 2.0'
+  gem 'web-console'
 end
-
