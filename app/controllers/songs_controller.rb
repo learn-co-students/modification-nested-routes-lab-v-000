@@ -25,32 +25,68 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      if @artist.nil?
+        redirect_to artists_path, alert: "Artist not found"
+      else
+      @song = Song.new(artist_id: params[:artist_id])
+    end
+    else
+      @song = Song.new
+    end
   end
 
   def create
-    @song = Song.new(song_params)
-
-    if @song.save
-      redirect_to @song
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      if @artist.nil?
+        redirect_to artists_path, alert: "Artist not found"
+      else
+        @song = Song.create(song_params)
+        redirect_to artist_song_path(@song)
+      end
     else
-      render :new
+      @song = Song.create(song_params)
+      redirect_to @song
     end
   end
 
   def edit
-    @song = Song.find(params[:id])
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      #artist-validation
+      if @artist.nil?
+        redirect_to artists_path, alert: "Artist not found."
+      else
+      @song = @artist.songs.find_by(id: params[:id])
+      #song-validation
+      if @song.nil?
+        redirect_to artist_songs_path
+      end 
+    end
+    else
+      @song = Song.find(params[:id])
+      @artists = Artist.all
+    end
   end
 
   def update
     @song = Song.find(params[:id])
-
-    @song.update(song_params)
-
-    if @song.save
-      redirect_to @song
-    else
-      render :edit
+    if params[:artist_id] && song_params[:artist_name] == "" || song_params[:artist_name] == nil
+      redirect_to artists_path
+    elsif
+      @artist = Artist.find_by(id: params[:artist_id])
+        if !@artist.songs.include?(@song)
+          redirect_to artist_songs_path
+        else
+          @song.update(song_params)
+          if @song.save
+            redirect_to @song
+          else
+            render :edit
+        end
+      end
     end
   end
 
@@ -64,7 +100,6 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
-
