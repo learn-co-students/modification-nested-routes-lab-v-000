@@ -1,9 +1,16 @@
 <%= form_for @song  do |f| %>
   <%= f.label :title %>
   <%= f.text_field :title %><br>
-  <%= f.label :artist_name %>
-  <%= f.text_field :artist_name %>
-  <br />
-
+    <!--<%#= f.label :artist_name %>
+    <%#= f.text_field :artist_name %>
+    <%#= collection_select(:song, :artist_id, Artist.all, :id, :name, prompt: true) %>
+    <%#= f.submit %>
+      <%# end %>
+    <%# if @song.artist.nil? %>
+      <%#= f.select :artist_id, options_from_collection_for_select(Artist.all, :id, :name) %><br>
+      <%# end %>
+    <%#= f.hidden_field :artist_id %>-->
+  <%#= artist_id_field(@song) %> <!-- call on the artist_id_field(song) helper method to simplify this view!!! -->
+  <%= artist_select(@artist, @song.artist) %>
   <%= f.submit %>
 <% end %>
