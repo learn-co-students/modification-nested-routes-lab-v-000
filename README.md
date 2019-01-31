@@ -11,7 +11,8 @@ creating and editing songs through an artist.
 
 ## Instructions
 
-1. Using nested resources, set up routes and controller actions to
+1. Using nested resou
+2. rces, set up routes and controller actions to
    create new `song` records through an `artist`. **Hint:** Don't forget
 to update the strong parameters.
 2. Set up routes and controller actions to support editing a `song` as a

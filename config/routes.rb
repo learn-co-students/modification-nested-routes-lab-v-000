@@ -3,4 +3,7 @@ Rails.application.routes.draw do
     resources :songs
   end
   resources :songs
+  
+   root 'songs#index'
+   
 end
