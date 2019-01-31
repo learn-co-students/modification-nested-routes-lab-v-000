@@ -2,6 +2,7 @@ class SongsController < ApplicationController
   def index
     if params[:artist_id]
       @artist = Artist.find_by(id: params[:artist_id])
+      #@songs = Artist.find(params[:artist_id]).songs
       if @artist.nil?
         redirect_to artists_path, alert: "Artist not found"
       else
@@ -14,6 +15,7 @@ class SongsController < ApplicationController
 
   def show
     if params[:artist_id]
+      #@song = Artist.find(params[:artist_id]).songs.find(params[:id])
       @artist = Artist.find_by(id: params[:artist_id])
       @song = @artist.songs.find_by(id: params[:id])
       if @song.nil?
@@ -25,7 +27,14 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    #binding.pry
+    #@song = Song.new #need to instainiate and save the new assoc artist object here?
+    #@artist = Artist.new
+    if params[:artist_id] && !Artist.exists?(params[:artist_id])
+     redirect_to artists_path, alert: "Artist not found."
+    else
+     @song = Song.new(artist_id: params[:artist_id])
+    end
   end
 
   def create
@@ -39,8 +48,20 @@ class SongsController < ApplicationController
   end
 
   def edit
-    @song = Song.find(params[:id])
-  end
+    #@song = Song.find(params[:id])
+    if params[:artist_id]
+      artist = Artist.find_by(id: params[:artist_id]) #find_by is used to iterate through the collection of songs that are by that artist! not just searching for that artist id. Need to be that artist id and be associated with those songs.
+      if artist.nil? #if no artists
+       redirect_to artists_path, alert: "artists not found." #flash message
+      else
+       @song = artist.songs.find_by(id: params[:id])
+       redirect_to artist_songs_path(artist), alert: "song not found." if @song.nil?
+      end
+     else
+       @song = Song.find(params[:id])
+     end
+   end
+
 
   def update
     @song = Song.find(params[:id])
@@ -64,7 +85,6 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_id)
   end
 end
-
