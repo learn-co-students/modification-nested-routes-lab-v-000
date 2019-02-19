@@ -25,7 +25,11 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    if Artist.find_by(id: params[:artist_id])
+      @song = Song.new(artist_id: params[:artist_id])
+    else
+      redirect_to artists_path
+    end
   end
 
   def create
@@ -38,8 +42,30 @@ class SongsController < ApplicationController
     end
   end
 
-  def edit
-    @song = Song.find(params[:id])
+  def edit #this method is wrong....
+    #checks if we are nested and both song and artist exist
+    if Artist.find_by(id: params[:artist_id]) && Song.find_by(id: params[:id])
+      @song = Song.find_by(id: params[:id])
+      @artist = Artist.find_by(id: params[:artist_id])
+      @artist.songs << @song
+    #checks if song exists
+    elsif Song.find_by(id: params[:id]) == nil
+      @artist = Artist.find_by(id: params[:artist_id])
+      redirect_to artist_songs_path(@artist)
+    #if we are nested and song exists but artist doesn't
+    elsif Artist.find_by(id: params[:artist_id]) == nil
+        redirect_to artists_path
+      #if we're not nested
+    elsif Song.find_by(id: params[:id])
+      @song = Song.find_by(id: params[:id])
+      redirect_to song_path(@song)
+      #if none of the above just go back to artists path
+    elsif !Song.find_by(id: params[:id]) && Artist.find_by(id: params[:artist_id])
+        @song = Song.find_by(id: params[:id])
+        redirect_to artists_path
+    else
+      redirect_to artists_path
+    end
   end
 
   def update
@@ -64,7 +90,6 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
-
