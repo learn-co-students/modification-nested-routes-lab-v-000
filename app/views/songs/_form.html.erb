@@ -1,9 +1,22 @@
+<%# binding.pry %>
+
 <%= form_for @song  do |f| %>
+<%# binding.pry %>
+  <%#= f.hidden_field :artist_id %>
+
   <%= f.label :title %>
   <%= f.text_field :title %><br>
-  <%= f.label :artist_name %>
-  <%= f.text_field :artist_name %>
+  <%#= f.label :artist_name %>
+  <%#= f.text_field :artist_name %>
   <br />
+<%# binding.pry %>
+
+  <!-- <%= f.text_field :artist_name, list: "artists_autocomplete" %>
+  <datalist id="artists_autocomplete">
+    <% Artist.all.each do |artist| %>
+    <option value="<%= artist.name %>" name="song_artist_id">
+      <% end %>
+  </datalist> -->
 
   <%= f.submit %>
 <% end %>
