@@ -43,7 +43,7 @@ class SongsController < ApplicationController
   end
 
   def edit
-    if params[:artist_id] && params[:id] && Song.find_by_id(params[:id]) && Artist.find_by_id(params[:artist_id])
+    if !params[:artist_id].blank? && !params[:id].blank? && Song.find_by_id(params[:id]) && Artist.find_by_id(params[:artist_id])
       if Song.find_by_id(params[:id]).artist == Artist.find_by_id(params[:artist_id])
         redirect_to artist_songs_path(Artist.find_by_id(params[:artist_id]))
 
