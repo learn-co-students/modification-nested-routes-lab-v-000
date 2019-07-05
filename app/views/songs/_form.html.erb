@@ -1,6 +1,6 @@
 <%= form_for @song do |f| %>
   <%= f.label :title %>
-  <%= f.text_field :title, required: "required" %><br><br>
+  <%= f.text_field :title, required: true %><br><br>
   <%= f.label "Select an artist: " %>
   <%= artist_select(@song.artist, @song) %><br><br>
   <%= f.label "Or create a new one:" %><br>
