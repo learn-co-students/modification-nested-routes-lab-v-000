@@ -1,6 +1,6 @@
 require 'pry'
 module SongsHelper
-    def artist_select(artist,song)
+    def artist_select(artist,song) #gets stuff in _form partial
         if artist #checking if artist exists
             song.artist.name #displays song artist name
         else #selects artist from collection

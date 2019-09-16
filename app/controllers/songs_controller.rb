@@ -50,18 +50,18 @@ class SongsController < ApplicationController
     end
   end
 
-  def edit
-    if params[:artist_id]
-      @artist = Artist.find_by(id: params[:artist_id])
+  def edit #_form uses song_helper
+    if params[:artist_id] 
+      @artist = Artist.find_by(id: params[:artist_id]) #important. used in helper method.
       if @artist.nil?
         redirect_to artists_path, alert: "Artist not found."
       else
-        @song = @artist.songs.find_by(id: params[:id])
+        @song = @artist.songs.find_by(id: params[:id]) #important. used in helper method.
         redirect_to artist_songs_path(@artist), alert: "Song not found." if @song.nil?
       end
     else
       if Song.find(params[:id])
-        @song = Song.find(params[:id])
+        @song = Song.find(params[:id]) 
       else
         redirect_to artist_songs_path(@artist), alert: "Song not found."
       end
