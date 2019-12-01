@@ -25,7 +25,16 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    # Validate that new songs created for an artist via nested routing are created for valid artists, and redirect to /artists if not.
+    if params[:artist_id] && !Artist.exists?(params[:artist_id])
+      redirect_to artists_path, alert: "Artist not found."
+    elsif params[:artist_id] && Artist.exists?(params[:artist_id])
+      @song = Song.new(artist_id: params[:artist_id])
+      @path_type = "nested"
+    else
+      @song = Song.new
+      @path_type = "not nested"
+    end
   end
 
   def create
@@ -39,7 +48,22 @@ class SongsController < ApplicationController
   end
 
   def edit
-    @song = Song.find(params[:id])
+    # Validate that songs being edited via nested routing have a valid artist. Redirect to /artists if not.
+    if params[:artist_id]
+      artist = Artist.find_by(id: params[:artist_id])
+      if artist.nil?
+        redirect_to artists_path, alert: "Artist not found."
+      else # Validate that songs being edited via nested routing are in the artist's songs collection. Redirect to /artists/id/songs if not.
+        @song = artist.songs.find_by(id: params[:id])
+        # Hint: You'll need to set a variable in the controller action to pass to the helper method as an argument along with a song instance.
+        @path_type = "nested"
+        redirect_to artist_songs_path(artist), alert: "Song not found." if @song.nil?
+      end
+    else
+      @song = Song.find(params[:id])
+      # Hint: You'll need to set a variable in the controller action to pass to the helper method as an argument along with a song instance.
+      @path_type = "not nested"
+    end
   end
 
   def update
@@ -64,7 +88,6 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
-
