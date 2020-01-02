@@ -25,7 +25,15 @@ class SongsController < ApplicationController
   end
 
   def new
-    @song = Song.new
+    if params[:artist_id] && !Artist.exists?(params[:artist_id])
+      redirect_to artists_path, alert: "Artist not found"
+    else
+      @song = Song.new(artist_id: params[:artist_id])
+      @artist = @song.artist
+      # Remember that if params[:artist_id] is nil, then @song.artist_id will be nil anyway,
+      # just as though I had called Song.new() instead.
+      # By the same token, @artist can be nil as well.
+    end
   end
 
   def create
@@ -39,7 +47,27 @@ class SongsController < ApplicationController
   end
 
   def edit
-    @song = Song.find(params[:id])
+    if params[:artist_id]
+      @artist = Artist.find_by_id(params[:artist_id]) # Limit the SQL queries as much as possible.
+
+      if @artist.nil?
+        redirect_to artists_path, alert: "Artist not found"
+        # Weird bug here: If I accidentally say artist_path, it redirects to /artists/:id, where :id is the SONG'S id.
+      else
+        @song = @artist.songs.find_by_id(params[:id])
+        redirect_to artist_songs_path(@artist), alert: "Song not found" if @song.nil?
+        # Once I figure out how to write controller-specific helpers, I can probably refactor the line above.
+        
+        # And for some reason, redirecting doesn't permanently exit this method, so I can't do this:
+          # redirect_to artists_path, alert: "Artist not found" if @artist.nil?
+          # @song = @artist.songs.find_by_id(params[:id])
+          # redirect_to artist_songs_path(@artist), alert: "Song not found" if @song.nil?
+        # If @artist is nil, @song = @artist.songs... breaks despite the redirect above it.
+      end
+    else 
+      @song = Song.find(params[:id])
+      # Ideally, I would redirect to /songs if the song doesn't exist, but this code is complicated enough.
+    end
   end
 
   def update
@@ -64,7 +92,7 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title, :artist_name)
+    params.require(:song).permit(:title, :artist_name, :artist_id)
   end
 end
 
