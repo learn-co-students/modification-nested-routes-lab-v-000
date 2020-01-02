@@ -1,9 +1,17 @@
 <%= form_for @song  do |f| %>
   <%= f.label :title %>
   <%= f.text_field :title %><br>
-  <%= f.label :artist_name %>
-  <%= f.text_field :artist_name %>
+
+  Artist name: <%= @artist.name if @artist %>
+  <%= artist_select(@song, @artist) %>
   <br />
 
   <%= f.submit %>
 <% end %>
+
+<%# if @song.artist_id %> 
+  <!-- For some reason, /songs/:id/edit is supposed to have that select list of artists. -->
+  <!-- I think I discovered a bug; this actually passes the tests despite not showing the artist select. -->
+  <!-- Update: It's because the song in that test had no artist! -->
+  <%#= f.hidden_field :artist_id %>
+  <!-- Artist name: <%#= @song.artist.name %> -->
