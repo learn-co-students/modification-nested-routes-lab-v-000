@@ -15,12 +15,15 @@ class SongsController < ApplicationController
   def show
     if params[:artist_id]
       @artist = Artist.find_by(id: params[:artist_id])
-      @song = @artist.songs.find_by(id: params[:id])
-      if @song.nil?
-        redirect_to artist_songs_path(@artist), alert: "Song not found"
+      if @artist.nil?
+        redirect_to artists_path(@artist), alert: "Artist not found"
+      else
+        @song = @artist.songs.find_by(id: params[:id])
+        redirect_to artist_songs_path(@artist), alert: "Song not found" if @song.nil?
       end
     else
-      @song = Song.find(params[:id])
+      @song = Song.find_by(id: params[:id])
+      redirect_to songs_path, alert: "Song not found" if @song.nil?
     end
   end
 
@@ -34,7 +37,6 @@ class SongsController < ApplicationController
 
   def create
     @song = Song.new(song_params)
-
     if @song.save
       redirect_to @song
     else
@@ -45,26 +47,25 @@ class SongsController < ApplicationController
   def edit
     if params[:artist_id]
       artist = Artist.find_by(id: params[:artist_id])
-      if artist
+      if artist.nil?
+        redirect_to artists_path, alert: "Artist not found."
+      else
         @song = artist.songs.find_by(id: params[:id])
         redirect_to artist_songs_path(artist), alert: "Song not found." if @song.nil?
-      else
-        redirect_to artists_path, alert: "Artist not found."
       end
     else
-      @song = Song.find(params[:id])
+      @song = Song.find_by(id: params[:id])
+      redirect_to songs_path if @song.nil?
     end
   end
 
   def update
-    @song = Song.find(params[:id])
+    @song = Song.find_by(id: params[:id])
 
-    @song.update(song_params)
-
-    if @song.save
-      redirect_to @song
-    else
+    if @song.nil?
       render :edit
+    else
+      redirect_to @song if !!@song.update(song_params)
     end
   end
 
